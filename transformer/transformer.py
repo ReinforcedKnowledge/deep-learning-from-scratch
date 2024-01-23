@@ -126,52 +126,6 @@ class EmbeddingsComponent(nn.Module):
     x += self.positional_encoding[:x.size(1), :]
     return self.dropout(x)
   
-# class Transformer(nn.Module):
-#   def __init__(self, input_embedder, target_embedder, N, d_model, target_vocab):
-#     super(Transformer, self).__init__()
-#     self.N = N
-
-#     self.input_embedder = input_embedder
-#     self.target_embedder = target_embedder
-
-#     self.encoders = nn.ModuleList([Encoder() for i in range(N)])
-#     self.decoders = nn.ModuleList(
-#         [Decoder() for i in range(N)]
-#     )
-
-#     self.target_projection = nn.Linear(d_model, target_vocab)
-#     self.target_projection.weight = self.target_embedder.embed_layer.weight
-
-#   def encode(self, enc_input, enc_mask):
-#     embedded_input = self.input_embedder(enc_input)
-#     encoder_output = self.encoders[0](embedded_input, enc_mask)
-#     for i in range(1, self.N):
-#       encoder_output = self.encoders[i](encoder_output, enc_mask)
-#     return encoder_output
-
-#   def decode(self, dec_input, dec_mask, enc_output, mem_mask):
-#     embedded_target = self.target_embedder(dec_input)
-#     decoder_output = self.decoders[0](embedded_target, dec_mask, enc_output, mem_mask)
-#     for i in range(1, self.N):
-#       decoder_output = self.decoders[i](decoder_output, dec_mask, enc_output, mem_mask)
-#     return decoder_output
-
-#   def forward(self, x, input_mask, y, target_mask, memory_mask):
-#     x = self.input_embedder(x)
-#     y = self.target_embedder(y)
-
-#     x = self.encoders[0](x, input_mask)
-#     for i in range(1, self.N):
-#       x = self.encoders[i](x, input_mask)
-
-#     y = self.decoders[0](y, target_mask, x, memory_mask)
-#     for i in range(1, self.N):
-#       y = self.decoders[i](y, target_mask, x, memory_mask)
-
-#     y = self.target_projection(y)
-#     y = F.log_softmax(y, dim=-1)
-#     return y
-  
 class Transformer(nn.Module):
   def __init__(self, vocab_size, N, d_model, h, d_ff, max_input_tokens=4096):
     super(Transformer, self).__init__()
